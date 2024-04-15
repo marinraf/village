@@ -15,13 +15,27 @@ class BpodIO(BpodCOMProtocolModules):
     """
     Bpod I/O logic.
     """
-    def __init__(self, serial_port=None, workspace_path=None, session_name=None, sync_channel=None, sync_mode=None):
-        self.workspace_path = workspace_path if workspace_path is not None else settings.get('SESSIONS_DIRECTORY')
-        self.session_name = session_name if session_name is not None else 'session'
+
+    def __init__(
+        self,
+        serial_port=None,
+        workspace_path=None,
+        session_name=None,
+        sync_channel=None,
+        sync_mode=None,
+    ):
+        self.workspace_path = (
+            workspace_path
+            if workspace_path is not None
+            else settings.get("SESSIONS_DIRECTORY")
+        )
+        self.session_name = (
+            session_name if session_name is not None else "session"
+        )
 
         # super(BpodIO, self).__init__(serial_port, sync_channel, sync_mode)
-        
-        super(BpodIO, self).__init__('/dev/ttyACM0', 255, 1)
+
+        super(BpodIO, self).__init__("/dev/ttyACM0", 255, 1)
 
         # self.session += SessionInfo("This is a PYBPOD file. Find more info at http://pybpod.readthedocs.io")
         # self.session += SessionInfo(Session.INFO_BPODAPI_VERSION, pybpodapi.__version__)
@@ -29,7 +43,13 @@ class BpodIO(BpodCOMProtocolModules):
         # self.session += SessionInfo(Session.INFO_SESSION_STARTED, self.session.start_timestamp)
 
     def create_session(self):
-        return Session(os.path.join(self.workspace_path, self.session_name)+'.csv') if self.workspace_path else Session()
+        return (
+            Session(
+                os.path.join(self.workspace_path, self.session_name) + ".csv"
+            )
+            if self.workspace_path
+            else Session()
+        )
 
     def close(self):
         """
@@ -38,7 +58,7 @@ class BpodIO(BpodCOMProtocolModules):
         super(BpodIO, self).close()
 
     def __del__(self):
-        if hasattr(self, 'session') and self.session:
+        if hasattr(self, "session") and self.session:
             del self._session
 
     @property

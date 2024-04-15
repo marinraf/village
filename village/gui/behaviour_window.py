@@ -6,7 +6,7 @@ class BehaviourWindow(QWidget):
     def __init__(self, app, width, height):
         super().__init__()
         self.app = app
-        self.setStyleSheet("background-color: black") 
+        self.setStyleSheet("background-color: black")
 
         rect = QRect(width, 0, width, height)
         self.setGeometry(rect)
@@ -15,4 +15,3 @@ class BehaviourWindow(QWidget):
 
     def closeEvent(self, event):
         event.ignore()
-        

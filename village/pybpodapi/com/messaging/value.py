@@ -33,16 +33,14 @@ class ValueMessage(BaseMessage):
         return self._value
 
     def tolist(self):
-        if self.value_name == 'TRIAL':
+        if self.value_name == "TRIAL":
             return [
-
                 self.value_name,
                 self.value,
             ]
         else:
             return [
                 None,
-
                 self.value_name,
                 self.value,
             ]

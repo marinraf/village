@@ -41,7 +41,9 @@ class BpodModule(object):
                     msg_id = i + 1
                     break
 
-        self.bpod_modules.bpod.load_serial_message(self.serial_port, msg_id, msg)
+        self.bpod_modules.bpod.load_serial_message(
+            self.serial_port, msg_id, msg
+        )
         return msg_id
 
     def start_module_relay(self):

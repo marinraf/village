@@ -89,7 +89,11 @@ class StateMachineBase(object):
         self.is_running = False
 
     def add_state(
-        self, state_name, state_timer=0, state_change_conditions={}, output_actions=()
+        self,
+        state_name,
+        state_timer=0,
+        state_change_conditions={},
+        output_actions=(),
     ):
         """
         Adds a state to an existing state matrix.
@@ -97,7 +101,7 @@ class StateMachineBase(object):
         :param str name: A character string containing the unique name of the state. The state will automatically be assigned a number for internal use and state synchronization via the sync port
         :param float timer: The state timer value, given in seconds. This value must be zero or positive, and can range between 0-3600s. If set to 0s and linked to a state transition, the state will still take ~100us to execute the state's output actions before the transition completes
         :param dict state_change_conditions: Dictionary whose keys are names of a valid input event (state change) and values are names of states to enter if the previously listed event occurs (or 'exit' to exit the matrix and return all captured data)
-        :param list(tuple) output_actions: a list of binary tuples where first value should contain the name of a valid output action and the second value should contain the value of the previously listed output action (see output actions for valid values).        
+        :param list(tuple) output_actions: a list of binary tuples where first value should contain the name of a valid output action and the second value should contain the value of the previously listed output action (see output actions for valid values).
 
         Example:
 
@@ -124,9 +128,14 @@ class StateMachineBase(object):
 
         self.state_timers[state_name_idx] = state_timer
 
-        for event_name, event_state_transition in state_change_conditions.items():
+        for (
+            event_name,
+            event_state_transition,
+        ) in state_change_conditions.items():
             try:
-                event_code = self.hardware.channels.event_names.index(event_name)
+                event_code = self.hardware.channels.event_names.index(
+                    event_name
+                )
                 logger.debug("Event code: %s", event_code)
             except:
                 raise SMAError(
@@ -138,7 +147,9 @@ class StateMachineBase(object):
                 )
 
             if event_state_transition in self.manifest:
-                destination_state_number = self.manifest.index(event_state_transition)
+                destination_state_number = self.manifest.index(
+                    event_state_transition
+                )
             else:
                 if event_state_transition in ["exit", ">exit"]:
                     destination_state_number = float("NaN")
@@ -148,10 +159,14 @@ class StateMachineBase(object):
                     destination_state_number = 255
                 else:  # Send to an undeclared state (replaced later with actual state in myBpod.sendStateMachine)
                     self.undeclared.append(event_state_transition)
-                    destination_state_number = (len(self.undeclared) - 1) + 10000
+                    destination_state_number = (
+                        len(self.undeclared) - 1
+                    ) + 10000
 
             if EventName.is_state_timer(event_name):
-                self.state_timer_matrix[state_name_idx] = destination_state_number
+                self.state_timer_matrix[state_name_idx] = (
+                    destination_state_number
+                )
 
             elif EventName.is_condition(event_name):
                 self.conditions.matrix[state_name_idx].append(
@@ -197,8 +212,10 @@ class StateMachineBase(object):
 
         for action_name, action_value in output_actions:
             if action_name == "Valve":
-                output_code = self.hardware.channels.output_channel_names.index(
-                    OutputChannel.Valve + str(action_value)
+                output_code = (
+                    self.hardware.channels.output_channel_names.index(
+                        OutputChannel.Valve + str(action_value)
+                    )
                 )
                 output_value = 1
 
@@ -208,15 +225,19 @@ class StateMachineBase(object):
                     output_value = math.pow(2, action_value - 1)
                 """
             elif action_name == OutputChannel.LED:
-                output_code = self.hardware.channels.output_channel_names.index(
-                    ChannelName.PWM + str(action_value)
+                output_code = (
+                    self.hardware.channels.output_channel_names.index(
+                        ChannelName.PWM + str(action_value)
+                    )
                 )
                 output_value = 255
 
             else:
                 try:
-                    output_code = self.hardware.channels.output_channel_names.index(
-                        action_name
+                    output_code = (
+                        self.hardware.channels.output_channel_names.index(
+                            action_name
+                        )
                     )
                 except:
                     raise SMAError(
@@ -242,10 +263,15 @@ class StateMachineBase(object):
                     output_value - 1
                 )
 
-            if output_code == self.hardware.channels.events_positions.globalTimerCancel:
+            if (
+                output_code
+                == self.hardware.channels.events_positions.globalTimerCancel
+            ):
                 self.global_timers.cancels_matrix[output_value - 1] = 1
 
-            self.output_matrix[state_name_idx].append((output_code, output_value))
+            self.output_matrix[state_name_idx].append(
+                (output_code, output_value)
+            )
 
         self.total_states_added += 1
 
@@ -284,12 +310,14 @@ class StateMachineBase(object):
         timer_channel_idx = 255
         if channel is not None:
             try:
-                timer_channel_idx = self.hardware.channels.output_channel_names.index(
-                    channel
+                timer_channel_idx = (
+                    self.hardware.channels.output_channel_names.index(channel)
                 )  # type: int
             except:
                 raise SMAError(
-                    "Error: {0} is an invalid output channel name.".format(channel)
+                    "Error: {0} is an invalid output channel name.".format(
+                        channel
+                    )
                 )
 
         index = timer_id - 1
@@ -326,7 +354,9 @@ class StateMachineBase(object):
         self.global_counters.attached_events[counter_number - 1] = event_code
         self.global_counters.thresholds[counter_number - 1] = threshold
 
-    def set_condition(self, condition_number, condition_channel, channel_value):
+    def set_condition(
+        self, condition_number, condition_channel, channel_value
+    ):
         """
         Set condition
 

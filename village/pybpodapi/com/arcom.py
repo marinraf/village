@@ -39,7 +39,7 @@ class ArduinoTypes(object):
 
     @staticmethod
     def get_uint8_array(array):
-        print('my_array ', array, str(ArduinoTypes.UINT8))
+        print("my_array ", array, str(ArduinoTypes.UINT8))
         return np.array(array, dtype=str(ArduinoTypes.UINT8)).tobytes()
 
     @staticmethod
@@ -92,7 +92,7 @@ class ArCOM(object):
         :return:
         """
         baudrate = 4000000
-        print('en open', baudrate, timeout)
+        print("en open", baudrate, timeout)
         self.serial_object = serial.Serial(
             serial_port, baudrate=baudrate, timeout=timeout
         )
@@ -114,7 +114,7 @@ class ArCOM(object):
         try:
             return self.serial_object.inWaiting()
         except:
-            print('Bpod connection ERROR. Check USB cable.')
+            print("Bpod connection ERROR. Check USB cable.")
             # return self.serial_object.inWaiting()
 
     ##############################################################

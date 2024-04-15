@@ -30,16 +30,11 @@ class StateOccurrence(BaseMessage):
         self.end_timestamp = end_timestamp
 
     def tolist(self):
-        return [
-            self.start_timestamp,
-            self.end_timestamp,
-            self.show_name,
-            None
-        ]
+        return [self.start_timestamp, self.end_timestamp, self.show_name, None]
 
     @property
     def show_name(self):
-        return 'STATE_' + self.content
+        return "STATE_" + self.content
 
     @classmethod
     def fromlist(cls, row):
@@ -47,7 +42,9 @@ class StateOccurrence(BaseMessage):
         Returns True if the typestr represents the class
         """
         obj = cls(
-            row[4], float(row[2]) if row[2] else None, float(row[3]) if row[3] else None
+            row[4],
+            float(row[2]) if row[2] else None,
+            float(row[3]) if row[3] else None,
         )
         obj.pc_timestamp = date_parser.parse(row[1])
 

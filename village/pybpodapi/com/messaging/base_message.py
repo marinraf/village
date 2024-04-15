@@ -21,7 +21,11 @@ class BaseMessage(object):
     def __str__(self):
         return "host-time:{0} pc-time:{1} {2}".format(
             self.host_timestamp if self.host_timestamp is not None else "",
-            self.pc_timestamp.strftime("%Y%m%d%H%M%S") if self.pc_timestamp is not None else "",
+            (
+                self.pc_timestamp.strftime("%Y%m%d%H%M%S")
+                if self.pc_timestamp is not None
+                else ""
+            ),
             self.content,
         )
 
@@ -33,12 +37,7 @@ class BaseMessage(object):
         return typestr == cls.MESSAGE_TYPE_ALIAS
 
     def tolist(self):
-        return [
-            self.host_timestamp,
-            None,
-            self.content,
-            None
-        ]
+        return [self.host_timestamp, None, self.content, None]
 
     @classmethod
     def fromlist(cls, row):

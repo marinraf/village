@@ -5,7 +5,7 @@ import socket
 
 class NonBlockingSocketReceive:
     def __init__(self, sck):
-        """
+        """s
         stream: the stream to read from.
                 Usually a process' stdout or stderr.
         """

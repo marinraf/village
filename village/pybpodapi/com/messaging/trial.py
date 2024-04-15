@@ -74,7 +74,9 @@ class Trial(BaseMessage):
         events_names = []  # type: list(str)
 
         for event in self.events_occurrences:
-            event_name = self.sma.hardware.channels.get_event_name(event.event_id)
+            event_name = self.sma.hardware.channels.get_event_name(
+                event.event_id
+            )
             if event_name not in events_names:
                 events_names.append(event_name)
 
@@ -101,7 +103,9 @@ class Trial(BaseMessage):
         """
         all_timestamps = {}
         for event_name in self.get_events_names():
-            all_timestamps[event_name] = self.get_timestamps_by_event_name(event_name)
+            all_timestamps[event_name] = self.get_timestamps_by_event_name(
+                event_name
+            )
 
         return all_timestamps
 

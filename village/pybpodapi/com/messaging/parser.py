@@ -46,7 +46,8 @@ class MessageParser(object):
                     break
         except Exception:
             logger.warning(
-                "Could not parse bpod message: {0}".format(str(row)), exc_info=True
+                "Could not parse bpod message: {0}".format(str(row)),
+                exc_info=True,
             )
             return ErrorMessage(row)  # default case
 

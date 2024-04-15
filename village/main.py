@@ -8,8 +8,6 @@ from gui.gui import Gui
 create_directories()
 
 app = QApplication([])
-app.setStyle('Fusion')
+app.setStyle("Fusion")
 gui = Gui(app)
 app.exec()
-
-

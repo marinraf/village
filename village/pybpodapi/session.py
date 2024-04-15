@@ -54,7 +54,10 @@ class Session(object):
             streams += [open(path, "w")]
 
         self.csvstream = StreamsWrapper(streams)
-        self.csvwriter = csv.Writer(self.csvstream, columns_headers=["TRIAL", "START", "END", "MSG", "VALUE"])
+        self.csvwriter = csv.Writer(
+            self.csvstream,
+            columns_headers=["TRIAL", "START", "END", "MSG", "VALUE"],
+        )
 
     def __del__(self):
 
@@ -78,16 +81,29 @@ class Session(object):
         self.history.append(msg)
 
         if self.csvwriter:
-            if msg.MESSAGE_TYPE_ALIAS == 'VAL':
-                if msg.content == 'TRIAL':
+            if msg.MESSAGE_TYPE_ALIAS == "VAL":
+                if msg.content == "TRIAL":
                     time0 = self.current_trial.trial_start_timestamp
-                    time1 = self.current_trial.trial_end_timestamp - self.current_trial.difference
-                    self.csvwriter.writerow([len(self.trials)] + [time0, time1] + msg.tolist())
+                    time1 = (
+                        self.current_trial.trial_end_timestamp
+                        - self.current_trial.difference
+                    )
+                    self.csvwriter.writerow(
+                        [len(self.trials)] + [time0, time1] + msg.tolist()
+                    )
                     self.csvwriter.flush()
                 else:
-                    self.csvwriter.writerow([len(self.trials)] + [None] + msg.tolist())
+                    self.csvwriter.writerow(
+                        [len(self.trials)] + [None] + msg.tolist()
+                    )
                     self.csvwriter.flush()
-            elif msg.MESSAGE_TYPE_ALIAS in {'INFO', 'TRIAL', 'END-TRIAL', 'stdout', 'stderr'}:
+            elif msg.MESSAGE_TYPE_ALIAS in {
+                "INFO",
+                "TRIAL",
+                "END-TRIAL",
+                "stdout",
+                "stderr",
+            }:
                 pass
             else:
                 self.csvwriter.writerow([len(self.trials)] + msg.tolist())
@@ -107,7 +123,9 @@ class Session(object):
 
         for i in range(len(current_trial.states)):
             if current_trial.states[i] in uniqueStates:
-                uniqueStateIndexes[i] = uniqueStates.index(current_trial.states[i])
+                uniqueStateIndexes[i] = uniqueStates.index(
+                    current_trial.states[i]
+                )
             else:
                 uniqueStateIndexes[i] = nUniqueStates
                 nUniqueStates += 1
@@ -115,15 +133,19 @@ class Session(object):
                 visitedStates[current_trial.states[i]] = 1
 
         # Create a 2-d matrix for each state in a list
-        uniqueStateDataMatrices = [[] for i in range(len(current_trial.states))]
+        uniqueStateDataMatrices = [
+            [] for i in range(len(current_trial.states))
+        ]
 
         # Append one matrix for each unique state
         for i in range(len(current_trial.states)):
             if len(current_trial.state_timestamps) > 1:
                 uniqueStateDataMatrices[uniqueStateIndexes[i]] += [
                     (
-                        current_trial.state_timestamps[i] + current_trial.trial_start_timestamp,
-                        current_trial.state_timestamps[i + 1] + current_trial.trial_start_timestamp,
+                        current_trial.state_timestamps[i]
+                        + current_trial.trial_start_timestamp,
+                        current_trial.state_timestamps[i + 1]
+                        + current_trial.trial_start_timestamp,
                     )
                 ]
 
@@ -131,14 +153,18 @@ class Session(object):
             thisStateName = sma.state_names[uniqueStates[i]]
 
             for state_dur in uniqueStateDataMatrices[i]:
-                self += StateOccurrence(thisStateName, state_dur[0], state_dur[1])
+                self += StateOccurrence(
+                    thisStateName, state_dur[0], state_dur[1]
+                )
 
         logger.debug("State names: %s", sma.state_names)
         logger.debug("nPossibleStates: %s", sma.total_states_added)
         for i in range(sma.total_states_added):
             thisStateName = sma.state_names[i]
             if not visitedStates[i]:
-                self += StateOccurrence(thisStateName, float("NaN"), float("NaN"))
+                self += StateOccurrence(
+                    thisStateName, float("NaN"), float("NaN")
+                )
 
         logger.debug(
             "Trial states: %s",

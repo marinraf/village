@@ -34,7 +34,10 @@ class StateMachineBuilder(StateMachineBase):
                 for k in range(0, len(inputTransitions)):
                     thisTransition = inputTransitions[k]
                     if thisTransition[1] == undeclaredStateNumber:
-                        inputTransitions[k] = (thisTransition[0], thisStateNumber)
+                        inputTransitions[k] = (
+                            thisTransition[0],
+                            thisStateNumber,
+                        )
                 self.input_matrix[j] = inputTransitions
 
                 # start matrix
@@ -42,7 +45,10 @@ class StateMachineBuilder(StateMachineBase):
                 for k in range(0, len(inputTransitions)):
                     thisTransition = inputTransitions[k]
                     if thisTransition[1] == undeclaredStateNumber:
-                        inputTransitions[k] = (thisTransition[0], thisStateNumber)
+                        inputTransitions[k] = (
+                            thisTransition[0],
+                            thisStateNumber,
+                        )
                 self.global_timers.start_matrix[j] = inputTransitions
 
                 # end matrix
@@ -50,7 +56,10 @@ class StateMachineBuilder(StateMachineBase):
                 for k in range(0, len(inputTransitions)):
                     thisTransition = inputTransitions[k]
                     if thisTransition[1] == undeclaredStateNumber:
-                        inputTransitions[k] = (thisTransition[0], thisStateNumber)
+                        inputTransitions[k] = (
+                            thisTransition[0],
+                            thisStateNumber,
+                        )
                 self.global_timers.end_matrix[j] = inputTransitions
 
                 # global counters
@@ -58,7 +67,10 @@ class StateMachineBuilder(StateMachineBase):
                 for k in range(0, len(inputTransitions)):
                     thisTransition = inputTransitions[k]
                     if thisTransition[1] == undeclaredStateNumber:
-                        inputTransitions[k] = (thisTransition[0], thisStateNumber)
+                        inputTransitions[k] = (
+                            thisTransition[0],
+                            thisStateNumber,
+                        )
                 self.global_counters.matrix[j] = inputTransitions
 
                 # conditions
@@ -66,7 +78,10 @@ class StateMachineBuilder(StateMachineBase):
                 for k in range(0, len(inputTransitions)):
                     thisTransition = inputTransitions[k]
                     if thisTransition[1] == undeclaredStateNumber:
-                        inputTransitions[k] = (thisTransition[0], thisStateNumber)
+                        inputTransitions[k] = (
+                            thisTransition[0],
+                            thisStateNumber,
+                        )
                 self.conditions.matrix[j] = inputTransitions
 
         # Check to make sure all states in manifest exist
@@ -85,9 +100,9 @@ class StateMachineBuilder(StateMachineBase):
         message += [0 if run_asap is None else 1]
         message += [1 if self.use_255_back_signal else 0]
 
-        return ArduinoTypes.get_uint8_array(message) + ArduinoTypes.get_uint16_array(
-            [statemachine_body_size]
-        )
+        return ArduinoTypes.get_uint8_array(
+            message
+        ) + ArduinoTypes.get_uint16_array([statemachine_body_size])
 
     def build_message(self):
         """
@@ -95,9 +110,15 @@ class StateMachineBuilder(StateMachineBase):
 
         :rtype: list(int)
         """
-        self.highest_used_global_counter = self.global_counters.get_max_index_used()
-        self.highest_used_global_timer = self.global_timers.get_max_index_used()
-        self.highest_used_global_condition = self.conditions.get_max_index_used()
+        self.highest_used_global_counter = (
+            self.global_counters.get_max_index_used()
+        )
+        self.highest_used_global_timer = (
+            self.global_timers.get_max_index_used()
+        )
+        self.highest_used_global_condition = (
+            self.conditions.get_max_index_used()
+        )
 
         self.highest_used_global_counter = (
             0
@@ -127,9 +148,11 @@ class StateMachineBuilder(StateMachineBase):
         tmp = []
         for i in range(self.total_states_added):
             tmp += [
-                self.total_states_added
-                if math.isnan(self.state_timer_matrix[i])
-                else self.state_timer_matrix[i]
+                (
+                    self.total_states_added
+                    if math.isnan(self.state_timer_matrix[i])
+                    else self.state_timer_matrix[i]
+                )
             ]
 
         message += tmp
@@ -147,7 +170,11 @@ class StateMachineBuilder(StateMachineBase):
                 tmp += [transition[0]]
                 dest_state = transition[1]
                 tmp += [
-                    self.total_states_added if math.isnan(dest_state) else dest_state
+                    (
+                        self.total_states_added
+                        if math.isnan(dest_state)
+                        else dest_state
+                    )
                 ]
         message += tmp
         logger.debug("INPUT MATRIX: %s", tmp)
@@ -160,7 +187,8 @@ class StateMachineBuilder(StateMachineBase):
             hw_state = [
                 evt
                 for evt in hw_state
-                if evt[0] < self.hardware.channels.events_positions.globalTimerTrigger
+                if evt[0]
+                < self.hardware.channels.events_positions.globalTimerTrigger
             ]
             n_differences = len(hw_state)
             tmp += [n_differences]
@@ -183,7 +211,11 @@ class StateMachineBuilder(StateMachineBase):
                     - self.hardware.channels.events_positions.globalTimerStart
                 ]
                 tmp += [
-                    self.total_states_added if math.isnan(dest_state) else dest_state
+                    (
+                        self.total_states_added
+                        if math.isnan(dest_state)
+                        else dest_state
+                    )
                 ]
         message += tmp
         logger.debug("GLOBAL_TIMER_START_MATRIX: %s", tmp)
@@ -202,7 +234,11 @@ class StateMachineBuilder(StateMachineBase):
                     - self.hardware.channels.events_positions.globalTimerEnd
                 ]
                 tmp += [
-                    self.total_states_added if math.isnan(dest_state) else dest_state
+                    (
+                        self.total_states_added
+                        if math.isnan(dest_state)
+                        else dest_state
+                    )
                 ]
         message += tmp
         logger.debug("GLOBAL_TIMER_END_MATRIX: %s", tmp)
@@ -221,7 +257,11 @@ class StateMachineBuilder(StateMachineBase):
                     - self.hardware.channels.events_positions.globalCounter
                 ]
                 tmp += [
-                    self.total_states_added if math.isnan(dest_state) else dest_state
+                    (
+                        self.total_states_added
+                        if math.isnan(dest_state)
+                        else dest_state
+                    )
                 ]
         message += tmp
         logger.debug("GLOBAL_COUNTER_MATRIX: %s", tmp)
@@ -236,10 +276,15 @@ class StateMachineBuilder(StateMachineBase):
             for transition in state_transitions:
                 dest_state = transition[1]
                 tmp += [
-                    transition[0] - self.hardware.channels.events_positions.condition
+                    transition[0]
+                    - self.hardware.channels.events_positions.condition
                 ]
                 tmp += [
-                    self.total_states_added if math.isnan(dest_state) else dest_state
+                    (
+                        self.total_states_added
+                        if math.isnan(dest_state)
+                        else dest_state
+                    )
                 ]
 
         message += tmp
@@ -359,11 +404,13 @@ class StateMachineBuilder(StateMachineBase):
                 for i in used_timers
             ]
             + [
-                self.global_timers.on_set_delays[i] * self.hardware.cycle_frequency
+                self.global_timers.on_set_delays[i]
+                * self.hardware.cycle_frequency
                 for i in used_timers
             ]
             + [
-                self.global_timers.loop_intervals[i] * self.hardware.cycle_frequency
+                self.global_timers.loop_intervals[i]
+                * self.hardware.cycle_frequency
                 for i in used_timers
             ]
             + [self.global_counters.thresholds[i] for i in used_counters]

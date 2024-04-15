@@ -47,4 +47,4 @@ class StateTransition(BaseMessage):
 
     @property
     def show_name(self):
-        return '_Transition_to_' + self.content
+        return "_Transition_to_" + self.content

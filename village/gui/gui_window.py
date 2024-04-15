@@ -10,7 +10,6 @@ from village.camera import cam_corridor, cam_box
 import sys
 
 
-        
 class GuiWindow(QWidget):
     def __init__(self, app, width, height):
         super().__init__()
@@ -24,31 +23,31 @@ class GuiWindow(QWidget):
         self.setFixedSize(QSize(width, height))
         self.setStyleSheet("QToolTip {background-color: white; color: black}")
         self.setStyleSheet("QPushButton {font-weight: bold}")
-        
+
         self.create_main_layout()
         self.show()
-          
+
     def create_main_layout(self):
         if self.layout is not None:
             self.layout.delete_all_elements()
             QObjectCleanupHandler().add(self.layout)
         self.layout = MainLayout(self)
         self.setLayout(self.layout)
-        
+
     def create_monitor_layout(self):
         if self.layout is not None:
             self.layout.delete_all_elements()
             QObjectCleanupHandler().add(self.layout)
         self.layout = MonitorLayout(self)
         self.setLayout(self.layout)
-        
+
     def create_tasks_layout(self):
         if self.layout is not None:
             self.layout.delete_all_elements()
             QObjectCleanupHandler().add(self.layout)
         self.layout = TasksLayout(self)
         self.setLayout(self.layout)
-        
+
     def create_data_layout(self):
         if self.layout is not None:
             self.layout.delete_all_elements()
@@ -62,10 +61,9 @@ class GuiWindow(QWidget):
             QObjectCleanupHandler().add(self.layout)
         self.layout = SettingsLayout(self)
         self.setLayout(self.layout)
-        
+
     def exit_app(self):
         cam_corridor.stop_record()
         cam_box.stop_record()
         self.app.quit()
         sys.exit()
-        

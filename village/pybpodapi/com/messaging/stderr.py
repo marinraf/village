@@ -24,7 +24,11 @@ class StderrMessage(BaseMessage):
     def __str__(self):
         return "host-time:{0} pc-time:{1} {2}".format(
             self.host_timestamp if self.host_timestamp is not None else "",
-            self.pc_timestamp.strftime("%Y%m%d%H%M%S") if self.pc_timestamp else "",
+            (
+                self.pc_timestamp.strftime("%Y%m%d%H%M%S")
+                if self.pc_timestamp
+                else ""
+            ),
             self.content,
         )
 

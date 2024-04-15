@@ -35,12 +35,7 @@ class EventOccurrence(BaseMessage):
         return self._event_id
 
     def tolist(self):
-        return [
-            self.host_timestamp,
-            None,
-            self.event_name,
-            None
-        ]
+        return [self.host_timestamp, None, self.event_name, None]
 
     @classmethod
     def fromlist(cls, row):
