@@ -84,10 +84,10 @@ class StateMachineBase(object):
         self.use_255_back_signal = False
 
         # List of states that have been added to the state machine
-        self.manifest = []  # type: list(str)
+        self.manifest = []
 
         # List of states that have been referenced but not yet added
-        self.undeclared = []  # type:list(str)
+        self.undeclared = []
 
         # output actions
         self.output_matrix = [[] for i in range(self.hardware.max_states)]
@@ -152,7 +152,7 @@ class StateMachineBase(object):
             try:
                 event_code = self.hardware.channels.event_names.index(event_name)
                 logger.debug("Event code: %s", event_code)
-            except:
+            except:  # noqa: E722
                 raise SMAError(
                     "Error creating state: "
                     + state_name
@@ -246,7 +246,7 @@ class StateMachineBase(object):
                     output_code = self.hardware.channels.output_channel_names.index(
                         action_name
                     )
-                except:
+                except:  # noqa: E722
                     raise SMAError(
                         "Error creating state: "
                         + state_name
@@ -260,7 +260,7 @@ class StateMachineBase(object):
             if action_name == OutputChannel.GlobalCounterReset:
                 self.global_counters.reset_matrix[output_value] = 1
 
-            # For backwards compatability, integers specifying global timers
+            # For backwards compatibility, integers specifying global timers
             # convert to equivalent binary decimals.
             # To specify binary, use a string of bits.
             if (
@@ -318,7 +318,7 @@ class StateMachineBase(object):
                 timer_channel_idx = self.hardware.channels.output_channel_names.index(
                     channel
                 )  # type: int
-            except:
+            except:  # noqa: E722
                 raise SMAError(
                     "Error: {0} is an invalid output channel name.".format(channel)
                 )

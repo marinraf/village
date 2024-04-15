@@ -114,7 +114,7 @@ class ArCOM(object):
         """
         try:
             return self.serial_object.inWaiting()
-        except:
+        except:  # noqa: E722
             print("Bpod connection ERROR. Check USB cable.")
             # return self.serial_object.inWaiting()
 

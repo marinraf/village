@@ -169,7 +169,7 @@ class BpodBase(object):
         if not self._bpodcom_set_sync_channel_and_mode(
             sync_channel=self.sync_channel, sync_mode=self.sync_mode
         ):
-            raise BpodErrorException("Error: Failed to configure syncronization.")
+            raise BpodErrorException("Error: Failed to configure synchronization.")
 
         # check if any module is connected
         self.bpod_modules = self._bpodcom_get_modules_info(self._hardware)
@@ -304,7 +304,7 @@ class BpodBase(object):
                     self.trial_start_timestamp = (
                         self._bpodcom_get_trial_timestamp_start()
                     )
-            except:
+            except:  # noqa: E722
                 self._session += ValueMessage("BPODCRASH", "waiting 100 ms")
                 time.sleep(0.1)
                 self.send_state_machine(sma)
@@ -601,7 +601,7 @@ class BpodBase(object):
                 state_name = sma.state_names[sma.current_state]
                 try:
                     time = event_timestamp + self.trial_start_timestamp
-                except:
+                except:  # noqa: E722
                     time = 10000
                 self._session += StateTransition(state_name, time)
 

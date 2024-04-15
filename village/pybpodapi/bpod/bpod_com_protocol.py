@@ -442,15 +442,15 @@ class BpodCOMProtocol(BpodBase):
     def _bpodcom_read_trial_start_timestamp_seconds(self):
         """
         A new incoming timestamp message is available.
-        Read trial start timestamp in milliseconds and convert to seconds.
+        Read trial start timestamp in millliseconds and convert to seconds.
 
-        :return: trial start timestamp in milliseconds
+        :return: trial start timestamp in millliseconds
         :rtype: float
         """
         response = self._arcom.read_uint32()  # type: int
 
         # print('response', response)
-        # logger.debug("Received start trial timestamp in millseconds: %s", response)
+        # logger.debug("Received start trial timestamp in milliseconds: %s", response)
 
         # trial_start_timestamp = response / 1000.0
 

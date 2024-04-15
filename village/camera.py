@@ -124,7 +124,7 @@ try:
     cam_box = Camera(1, "BOX")
     cam_corridor.start_record()
     cam_box.start_record()
-    log("succesfully imported cam_box and cam_corridor")
+    log("successfully imported cam_box and cam_corridor")
 except Exception as e:
     log("Could not create camera: ", exception=e)
     cam_box = Fake()

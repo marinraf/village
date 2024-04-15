@@ -87,7 +87,7 @@ class StateMachineBuilder(StateMachineBase):
 
         # Check to make sure all states in manifest exist
         logger.debug(
-            "Total states added: %s | Manifested sates: %s",
+            "Total states added: %s | Manifested states: %s",
             self.total_states_added,
             len(self.manifest),
         )

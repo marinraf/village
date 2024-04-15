@@ -36,7 +36,6 @@ class NonBlockingStreamReader:
                     line = self.stream.readline()
                     if line:
                         self.queue.put(line)
-                        lines = None
                     self.event.wait(0.01)
 
         self._t = PopulateQueue(self._s, self._q)
