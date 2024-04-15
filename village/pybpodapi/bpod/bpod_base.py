@@ -660,16 +660,15 @@ class BpodBase(object):
     # PROPERTIES
     @property
     def session(self):
-        print("ses")
-        return self._session  # type: Session
+        return self._session
 
     @session.setter
     def session(self, value):
-        self._session = value  # type: Session
+        self._session = value
 
     @property
     def hardware(self):
-        return self._hardware  # type: Hardware
+        return self._hardware
 
     @property
     def modules(self):

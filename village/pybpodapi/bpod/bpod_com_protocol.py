@@ -655,7 +655,7 @@ class BpodCOMProtocol(BpodBase):
     @property
     def hardware(self):
         # self.__bpodcom_check_com_ready()
-        return BpodBase.hardware.fget(self)  # type: Hardware
+        return BpodBase.hardware.fget(self)
 
     @property
     def modules(self):

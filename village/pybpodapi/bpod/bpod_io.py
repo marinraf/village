@@ -50,15 +50,15 @@ class BpodIO(BpodCOMProtocolModules):
 
     @property
     def workspace_path(self):
-        return self._workspace_path  # type: str
+        return self._workspace_path
 
     @workspace_path.setter
     def workspace_path(self, value):
-        self._workspace_path = value  # type: str
+        self._workspace_path = value
 
     @property
     def session_name(self):
-        return self._session_name  # type: str
+        return self._session_name
 
     @session_name.setter
     def session_name(self, value):
