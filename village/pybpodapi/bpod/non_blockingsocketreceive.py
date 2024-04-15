@@ -1,6 +1,6 @@
-from threading import Thread, Event
-from queue import Queue, Empty
 import socket
+from queue import Empty, Queue
+from threading import Event, Thread
 
 
 class NonBlockingSocketReceive:

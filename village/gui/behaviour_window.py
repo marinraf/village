@@ -1,5 +1,5 @@
+from PyQt5.QtCore import QRect, QSize
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QSize, QRect
 
 
 class BehaviourWindow(QWidget):

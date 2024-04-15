@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QLabel
 from gui.layout import Layout
+from PyQt5.QtWidgets import QLabel
 
 
 class TasksLayout(Layout):
@@ -12,9 +12,7 @@ class TasksLayout(Layout):
         self.first_column = 10
 
         self.tasks_button.setDisabled(True)
-        self.tasks_button.setStyleSheet(
-            "QPushButton {background-color: lightblue}"
-        )
+        self.tasks_button.setStyleSheet("QPushButton {background-color: lightblue}")
 
         label = QLabel("Tasks")
         label.setStyleSheet("font-weight: bold")

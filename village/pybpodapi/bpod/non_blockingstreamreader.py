@@ -1,6 +1,6 @@
-from threading import Thread, Event
-from queue import Queue, Empty
+from queue import Empty, Queue
 from sys import platform
+from threading import Event, Thread
 
 if platform in ["linux", "linux2", "darwin"]:
     import fcntl

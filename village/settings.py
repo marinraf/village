@@ -1,5 +1,7 @@
 from enum import Enum
+
 from PyQt5.QtCore import QSettings
+
 from village.log import log
 
 
@@ -258,22 +260,18 @@ touchscreen_settings = [
         tuple,
         "The resolution for the reading of the touch screen",
     ),
-    Setting(
-        "SCREEN_SIZE_MM", (400, 200), tuple, "The size of the screen in mm"
-    ),
+    Setting("SCREEN_SIZE_MM", (400, 200), tuple, "The size of the screen in mm"),
     Setting(
         "TIME_BETWEEN_TOUCHES_S",
         0.5,
         float,
         """Refractary period after a touch to not record multiple touches 
-        per second""",
+            per second""",
     ),
 ]
 
 screen_settings = [
-    Setting(
-        "SCREEN_SIZE_MM", (400, 200), tuple, "The size of the screen in mm"
-    )
+    Setting("SCREEN_SIZE_MM", (400, 200), tuple, "The size of the screen in mm")
 ]
 
 sound_settings = [Setting("PARAMETER", 1, int, "The parameter of the sound")]
@@ -315,9 +313,7 @@ bpod_settings = [
 ]
 
 bpod_advanced_settings = [
-    Setting(
-        "BPOD_SERIAL_PORT", "/dev/Bpod", str, "The serial port of the Bpod"
-    ),
+    Setting("BPOD_SERIAL_PORT", "/dev/Bpod", str, "The serial port of the Bpod"),
     Setting(
         "BPOD_NET_PORT",
         36000,
@@ -332,9 +328,7 @@ bpod_advanced_settings = [
 harp_settings = [Setting("PARAMETER", 1, int, "The parameter of the harp")]
 
 harp_advanced_settings = [
-    Setting(
-        "HARP_SERIAL_PORT", "/dev/Harp", str, "The serial port of the Harp"
-    )
+    Setting("HARP_SERIAL_PORT", "/dev/Harp", str, "The serial port of the Harp")
 ]
 
 extra_settings = [
@@ -365,7 +359,7 @@ settings = Settings(
 )
 
 
-if settings.get("FIRST_LAUNCH") == None:
+if settings.get("FIRST_LAUNCH") is None:
     settings.create_factory_settings()
 
 

@@ -1,17 +1,13 @@
-# !/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 import logging
 import time
+
 import numpy as np
-
-from pybpodapi.com.arcom import ArduinoTypes
-from pybpodapi.bpod_modules.bpod_modules import BpodModules
 from pybpodapi.bpod.bpod_com_protocol import BpodCOMProtocol
-from pybpodapi.com.protocol.send_msg_headers import SendMessageHeader
+from pybpodapi.bpod_modules.bpod_modules import BpodModules
+from pybpodapi.com.arcom import ArduinoTypes
 from pybpodapi.com.protocol.recv_msg_headers import ReceiveMessageHeader
+from pybpodapi.com.protocol.send_msg_headers import SendMessageHeader
 from pybpodapi.exceptions.bpod_error import BpodErrorException
-
 
 logger = logging.getLogger(__name__)
 
@@ -69,25 +65,15 @@ class BpodCOMProtocolModules(BpodCOMProtocol):
                     while flag == 1:  # has more info to be read
                         param_type = self._arcom.read_uint8()
 
-                        if (
-                            param_type
-                            == ReceiveMessageHeader.MODULE_REQUESTED_EVENT
-                        ):
-                            modules_requested_events[i] = (
-                                self._arcom.read_uint8()
-                            )
+                        if param_type == ReceiveMessageHeader.MODULE_REQUESTED_EVENT:
+                            modules_requested_events[i] = self._arcom.read_uint8()
 
-                        elif (
-                            param_type
-                            == ReceiveMessageHeader.MODULE_EVENT_NAMES
-                        ):
+                        elif param_type == ReceiveMessageHeader.MODULE_EVENT_NAMES:
 
                             n_event_names = self._arcom.read_uint8()
                             for _ in range(n_event_names):
                                 n_chars = self._arcom.read_uint8()
-                                event_name = self._arcom.read_char_array(
-                                    n_chars
-                                )
+                                event_name = self._arcom.read_char_array(n_chars)
                                 events_names.append("".join(event_name))
 
                         flag = self._arcom.read_uint8()
@@ -112,9 +98,7 @@ class BpodCOMProtocolModules(BpodCOMProtocol):
             if module.connected:
 
                 if modules_requested_events[i] > module.n_serial_events:
-                    n_to_reassign = (
-                        modules_requested_events[i] - module.n_serial_events
-                    )
+                    n_to_reassign = modules_requested_events[i] - module.n_serial_events
                     module.n_serial_events = modules_requested_events[i]
                 else:
                     n_to_reassign = 0

@@ -1,6 +1,4 @@
-from PyQt5.QtWidgets import QGridLayout
-from PyQt5.QtWidgets import QPushButton, QMessageBox
-from village.log import log
+from PyQt5.QtWidgets import QGridLayout, QMessageBox, QPushButton
 
 
 class Layout(QGridLayout):

@@ -1,12 +1,10 @@
 import logging
 import os
 
-from village.settings import settings
 from pybpodapi.bpod.bpod_com_protocol_modules import BpodCOMProtocolModules
-from pybpodapi.com.messaging.session_info import SessionInfo
-
 from pybpodapi.session import Session
 
+from village.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -29,24 +27,13 @@ class BpodIO(BpodCOMProtocolModules):
             if workspace_path is not None
             else settings.get("SESSIONS_DIRECTORY")
         )
-        self.session_name = (
-            session_name if session_name is not None else "session"
-        )
+        self.session_name = session_name if session_name is not None else "session"
 
-        # super(BpodIO, self).__init__(serial_port, sync_channel, sync_mode)
-
-        super(BpodIO, self).__init__("/dev/ttyACM0", 255, 1)
-
-        # self.session += SessionInfo("This is a PYBPOD file. Find more info at http://pybpod.readthedocs.io")
-        # self.session += SessionInfo(Session.INFO_BPODAPI_VERSION, pybpodapi.__version__)
-        # self.session += SessionInfo(Session.INFO_SESSION_NAME, self.session_name)
-        # self.session += SessionInfo(Session.INFO_SESSION_STARTED, self.session.start_timestamp)
+        super(BpodIO, self).__init__(serial_port, sync_channel, sync_mode)
 
     def create_session(self):
         return (
-            Session(
-                os.path.join(self.workspace_path, self.session_name) + ".csv"
-            )
+            Session(os.path.join(self.workspace_path, self.session_name) + ".csv")
             if self.workspace_path
             else Session()
         )

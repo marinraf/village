@@ -1,6 +1,3 @@
-# !/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 import logging
 
 from pybpodapi.state_machine.state_machine_builder import StateMachineBuilder

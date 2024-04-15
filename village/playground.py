@@ -1,6 +1,5 @@
 from pybpodapi.protocol import Bpod, StateMachine
 
-
 bpod = Bpod()
 sma = StateMachine(bpod)
 

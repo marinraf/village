@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QLabel
 from gui.layout import Layout
+from PyQt5.QtWidgets import QLabel
 
 
 class DataLayout(Layout):
@@ -12,9 +12,7 @@ class DataLayout(Layout):
         self.first_column = 10
 
         self.data_button.setDisabled(True)
-        self.data_button.setStyleSheet(
-            "QPushButton {background-color: lightblue}"
-        )
+        self.data_button.setStyleSheet("QPushButton {background-color: lightblue}")
 
         label = QLabel("Data")
         label.setStyleSheet("font-weight: bold")

@@ -1,15 +1,16 @@
-from picamera2 import Picamera2, MappedArray, Preview
+import os
+import time
+from pprint import pprint
+
+import cv2
+from libcamera import controls
+from picamera2 import MappedArray, Picamera2, Preview
 from picamera2.encoders import H264Encoder, Quality
 from picamera2.outputs import FfmpegOutput
-from libcamera import controls
-from pprint import pprint
-import cv2
-import time
-import os
+
 from village.fake import Fake
 from village.log import log
 from village.settings import settings
-
 
 # info about picamera2: https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 
@@ -28,9 +29,12 @@ def print_info_about_the_connected_cameras():
 
 # the camera class
 class Camera:
-    def __init__(self, index, name):
+    """
+    Camera class to handle the camera and the video recording.
+    The camera is a Picamera2 object.
+    """
 
-        # camera settings
+    def __init__(self, index, name):
         cam_raw = {"size": (2304, 1296)}
         cam_main = {"size": (640, 480)}
         cam_controls = {
@@ -38,9 +42,8 @@ class Camera:
             "AfMode": controls.AfModeEnum.Manual,
             "LensPosition": 0.0,
         }
-        encoder_quality = (
-            Quality.VERY_LOW
-        )  # VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
+        encoder_quality = Quality.VERY_LOW
+        # VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH
 
         self.index = index
         self.name = name
@@ -64,18 +67,13 @@ class Camera:
         self.cam.start()
 
     def stop_preview(self):
-        try:
-            self.cam.stop_preview()
-        except:
-            pass
+        self.cam.stop_preview()
 
     def reset_preview(self):
         self.cam.start_preview(Preview.NULL)
 
     def start_record(self):
-        self.cam.start_encoder(
-            self.encoder, self.output, quality=self.encoder_quality
-        )
+        self.cam.start_encoder(self.encoder, self.output, quality=self.encoder_quality)
 
     def stop_record(self):
         self.cam.stop_encoder()
@@ -94,9 +92,8 @@ class Camera:
 
     def change_framerate(self, framerate):
         assert isinstance(framerate, int), "framerate must be int"
-        limit = int(
-            1000000.0 / float(framerate)
-        )  # min and max number of microseconds for each frame
+        limit = int(1000000.0 / float(framerate))
+        # limit is the min and max number of microseconds for each frame
         self.cam.set_controls({"FrameDurationLimits": (limit, limit)})
 
     def print_info_about_config(self):
@@ -116,16 +113,10 @@ class Camera:
         with MappedArray(request, "main") as m:
             greyscale_frame = cv2.cvtColor(m.array, cv2.COLOR_BGR2GRAY)
             gaussian_frame = cv2.GaussianBlur(greyscale_frame, (5, 5), 0)
-            thresh = cv2.threshold(
-                gaussian_frame, threshold, 225, cv2.THRESH_BINARY_INV
-            )[1]
-            area = cv2.countNonZero(thresh)
-            cv2.putText(
-                m.array, timestamp, origin1, font, scale, colour, thickness
-            )
-            cv2.putText(
-                m.array, str(area), origin2, font, scale, colour, thickness
-            )
+            t = cv2.threshold(gaussian_frame, threshold, 225, cv2.THRESH_BINARY_INV)[1]
+            area = cv2.countNonZero(t)
+            cv2.putText(m.array, timestamp, origin1, font, scale, colour, thickness)
+            cv2.putText(m.array, str(area), origin2, font, scale, colour, thickness)
 
 
 try:

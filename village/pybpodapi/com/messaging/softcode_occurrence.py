@@ -1,5 +1,3 @@
-# !/usr/bin/python3from pybpodapi.com.messaging.base_message import BaseMessage
-# -*- coding: utf-8 -*-
 from pybpodapi.com.messaging.base_message import BaseMessage
 from pybpodapi.utils import date_parser
 

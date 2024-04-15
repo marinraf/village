@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QLabel
+from gui.layout import Layout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-from gui.layout import Layout
+from PyQt5.QtWidgets import QLabel
 
 
 class MainLayout(Layout):
@@ -16,15 +16,11 @@ class MainLayout(Layout):
         self.image_columns = self.num_of_columns - 20
 
         self.main_button.setDisabled(True)
-        self.main_button.setStyleSheet(
-            "QPushButton {background-color: lightblue}"
-        )
+        self.main_button.setStyleSheet("QPushButton {background-color: lightblue}")
 
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
-        pixmap = QPixmap(
-            "/home/mousevillage/mouse_village/resources/mouse_village.png"
-        )
+        pixmap = QPixmap("/home/mousevillage/mouse_village/resources/mouse_village.png")
         self.label.setPixmap(pixmap)
         self.label.setFixedSize(
             self.image_columns * self.column_width,

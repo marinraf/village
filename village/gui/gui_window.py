@@ -1,17 +1,20 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QSize, QRect, QObjectCleanupHandler
+import sys
+
+from gui.data_layout import DataLayout
 from gui.main_layout import MainLayout
 from gui.monitor_layout import MonitorLayout
-from gui.tasks_layout import TasksLayout
-from gui.data_layout import DataLayout
 from gui.settings_layout import SettingsLayout
-from village.log import log
-from village.camera import cam_corridor, cam_box
-import sys
+from gui.tasks_layout import TasksLayout
+from PyQt5.QtCore import QObjectCleanupHandler, QRect, QSize
+from PyQt5.QtWidgets import QWidget
+
+from village.camera import cam_box, cam_corridor
 
 
 class GuiWindow(QWidget):
-    def __init__(self, app, width, height):
+    def __init__(self, app, width, height):  # !/usr/bin/python3
+        # -*- coding: utf-8 -*-
+
         super().__init__()
         self.app = app
         self.layout = None

@@ -1,10 +1,10 @@
 import logging
 import sys
 from datetime import datetime as datetime_now
-from pybpodapi.com.messaging.trial import Trial
-from pybpodapi.com.messaging.state_occurrence import StateOccurrence
-from pybpodapi.utils import csv
 
+from pybpodapi.com.messaging.state_occurrence import StateOccurrence
+from pybpodapi.com.messaging.trial import Trial
+from pybpodapi.utils import csv
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ class Session(object):
         self.trials = []  # type: list[Trial]
         self.firmware_version = None  # type: int
         self.bpod_version = None  # type: int
-        self.start_timestamp = datetime_now.now()  # type: datetime
+        self.start_timestamp = datetime_now.now()
 
         self.csvwriter = None
         self._path = path
@@ -70,7 +70,8 @@ class Session(object):
         """
         Add new trial to this session and associate a state machine to it
 
-        :param pybpodapi.model.state_machine sma: state machine associated with this trial
+        :param pybpodapi.model.state_machine sma: state machine
+        associated with this trial
         """
 
         if isinstance(msg, Trial):
@@ -93,9 +94,7 @@ class Session(object):
                     )
                     self.csvwriter.flush()
                 else:
-                    self.csvwriter.writerow(
-                        [len(self.trials)] + [None] + msg.tolist()
-                    )
+                    self.csvwriter.writerow([len(self.trials)] + [None] + msg.tolist())
                     self.csvwriter.flush()
             elif msg.MESSAGE_TYPE_ALIAS in {
                 "INFO",
@@ -123,9 +122,7 @@ class Session(object):
 
         for i in range(len(current_trial.states)):
             if current_trial.states[i] in uniqueStates:
-                uniqueStateIndexes[i] = uniqueStates.index(
-                    current_trial.states[i]
-                )
+                uniqueStateIndexes[i] = uniqueStates.index(current_trial.states[i])
             else:
                 uniqueStateIndexes[i] = nUniqueStates
                 nUniqueStates += 1
@@ -133,9 +130,7 @@ class Session(object):
                 visitedStates[current_trial.states[i]] = 1
 
         # Create a 2-d matrix for each state in a list
-        uniqueStateDataMatrices = [
-            [] for i in range(len(current_trial.states))
-        ]
+        uniqueStateDataMatrices = [[] for i in range(len(current_trial.states))]
 
         # Append one matrix for each unique state
         for i in range(len(current_trial.states)):
@@ -153,18 +148,14 @@ class Session(object):
             thisStateName = sma.state_names[uniqueStates[i]]
 
             for state_dur in uniqueStateDataMatrices[i]:
-                self += StateOccurrence(
-                    thisStateName, state_dur[0], state_dur[1]
-                )
+                self += StateOccurrence(thisStateName, state_dur[0], state_dur[1])
 
         logger.debug("State names: %s", sma.state_names)
         logger.debug("nPossibleStates: %s", sma.total_states_added)
         for i in range(sma.total_states_added):
             thisStateName = sma.state_names[i]
             if not visitedStates[i]:
-                self += StateOccurrence(
-                    thisStateName, float("NaN"), float("NaN")
-                )
+                self += StateOccurrence(thisStateName, float("NaN"), float("NaN"))
 
         logger.debug(
             "Trial states: %s",
@@ -172,7 +163,7 @@ class Session(object):
         )
 
         # save events occurrences on trial
-        # current_trial.events_occurrences = sma.raw_data.events_occurrences  # type: list
+        # current_trial.events_occurrences = sma.raw_data.events_occurrences
 
         logger.debug(
             "Trial events: %s",

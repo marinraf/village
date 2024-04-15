@@ -1,7 +1,8 @@
 import logging
-import serial
-import numpy as np
 import struct
+
+import numpy as np
+import serial
 
 logger = logging.getLogger(__name__)
 

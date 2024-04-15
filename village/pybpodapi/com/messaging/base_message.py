@@ -1,6 +1,5 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
 from datetime import datetime as datetime_now
+
 from pybpodapi.utils import date_parser
 
 

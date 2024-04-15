@@ -1,9 +1,7 @@
-from PyQt5.QtWidgets import QApplication
-from village.log import log
-from village.settings import settings
-from village.utils import *
 from gui.gui import Gui
+from PyQt5.QtWidgets import QApplication
 
+from village.utils import create_directories
 
 create_directories()
 

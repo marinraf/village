@@ -1,6 +1,6 @@
-from village.log import log
-from village.settings import settings
 import os
+
+from village.settings import settings
 
 
 def create_directories():

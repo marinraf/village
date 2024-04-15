@@ -1,6 +1,5 @@
 import logging
 
-from village.settings import settings
 from pybpodapi.bpod.bpod_base import BpodBase
 from pybpodapi.bpod.hardware.channels import ChannelType
 from pybpodapi.bpod_modules.bpod_module import BpodModule
@@ -8,6 +7,8 @@ from pybpodapi.com.arcom import ArCOM, ArduinoTypes
 from pybpodapi.com.protocol.recv_msg_headers import ReceiveMessageHeader
 from pybpodapi.com.protocol.send_msg_headers import SendMessageHeader
 from pybpodapi.exceptions.bpod_error import BpodErrorException
+
+from village.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +29,7 @@ class BpodCOMProtocol(BpodBase):
     """
 
     def __init__(self, serial_port=None, sync_channel=None, sync_mode=None):
-        super(BpodCOMProtocol, self).__init__(
-            serial_port, sync_channel, sync_mode
-        )
+        super(BpodCOMProtocol, self).__init__(serial_port, sync_channel, sync_mode)
 
         self._arcom = None  # type: ArCOM
         self.bpod_com_ready = False
@@ -55,9 +54,7 @@ class BpodCOMProtocol(BpodBase):
             self._arcom.close()
             self.bpod_com_ready = False
 
-    def manual_override(
-        self, channel_type, channel_name, channel_number, value
-    ):
+    def manual_override(self, channel_type, channel_name, channel_number, value):
         """
         Manually override a Bpod channel
 
@@ -73,39 +70,33 @@ class BpodCOMProtocol(BpodBase):
             )
             try:
                 self._bpodcom_override_input_state(channel_number, value)
-            except:
+            except:  # noqa: E722
                 raise BpodErrorException(
-                    "Error using manual_override: {name} is not a valid channel name.".format(
+                    "Error manual_override: {name} is not a valid channel name.".format(
                         name=channel_name
                     )
                 )
 
         elif channel_type == ChannelType.OUTPUT:
             if channel_name == "Serial":
-                self._bpodcom_send_byte_to_hardware_serial(
-                    channel_number, value
-                )
+                self._bpodcom_send_byte_to_hardware_serial(channel_number, value)
 
             else:
                 try:
                     output_channel_name = channel_name + str(channel_number)
-                    channel_number = (
-                        self.hardware.channels.output_channel_names.index(
-                            output_channel_name
-                        )
+                    channel_number = self.hardware.channels.output_channel_names.index(
+                        output_channel_name
                     )
-                    self._bpodcom_override_digital_hardware_state(
-                        channel_number, value
-                    )
-                except:
+                    self._bpodcom_override_digital_hardware_state(channel_number, value)
+                except:  # noqa: E722
                     raise BpodErrorException(
-                        "Error using manual_override: {name} is not a valid channel name.".format(
+                        "Error manual_override: {name} not valid channel name.".format(
                             name=output_channel_name
                         )
                     )
         else:
             raise BpodErrorException(
-                'Error using manualOverride: first argument must be "Input" or "Output".'
+                "Error using manualOverride: first argument must be Input or Output."
             )
 
     def _bpodcom_connect(self, serial_port, baudrate=115200, timeout=1):
@@ -125,9 +116,7 @@ class BpodCOMProtocol(BpodBase):
         """
         Signal Bpod device to disconnect now
         """
-        logger.debug(
-            "Requesting disconnect (%s)", SendMessageHeader.DISCONNECT
-        )
+        logger.debug("Requesting disconnect (%s)", SendMessageHeader.DISCONNECT)
 
         self._arcom.write_char(SendMessageHeader.DISCONNECT)
 
@@ -197,14 +186,16 @@ class BpodCOMProtocol(BpodBase):
 
     def _bpodcom_stop_trial(self):
         """
-        Stops ongoing trial (We recommend using computer-side pauses between trials, to keep data uniform)
+        Stops ongoing trial (We recommend using computer-side pauses between trials,
+        to keep data uniform)
         """
         logger.debug("Pausing trial")
         self._arcom.write_char(SendMessageHeader.EXIT_AND_RETURN)
 
     def _bpodcom_pause_trial(self):
         """
-        Pause ongoing trial (We recommend using computer-side pauses between trials, to keep data uniform)
+        Pause ongoing trial (We recommend using computer-side pauses between trials,
+        to keep data uniform)
         """
         logger.debug("Pausing trial")
         bytes2send = ArduinoTypes.get_uint8_array(
@@ -214,7 +205,8 @@ class BpodCOMProtocol(BpodBase):
 
     def _bpodcom_resume_trial(self):
         """
-        Resumes ongoing trial (We recommend using computer-side pauses between trials, to keep data uniform)
+        Resumes ongoing trial (We recommend using computer-side pauses between trials,
+        to keep data uniform)
         """
         logger.debug("Resume trial")
         bytes2send = ArduinoTypes.get_uint8_array(
@@ -251,9 +243,7 @@ class BpodCOMProtocol(BpodBase):
         logger.debug("Read cycle period: %s", cycle_period)
 
         max_serial_events = self._arcom.read_uint8()  # type: int
-        logger.debug(
-            "Read number of events per serial channel: %s", max_serial_events
-        )
+        logger.debug("Read number of events per serial channel: %s", max_serial_events)
 
         n_global_timers = self._arcom.read_uint8()  # type: int
         logger.debug("Read number of global timers: %s", n_global_timers)
@@ -267,17 +257,13 @@ class BpodCOMProtocol(BpodBase):
         n_inputs = self._arcom.read_uint8()  # type: int
         logger.debug("Read number of inputs: %s", n_inputs)
 
-        inputs = self._arcom.read_char_array(
-            array_len=n_inputs
-        )  # type: list(str)
+        inputs = self._arcom.read_char_array(array_len=n_inputs)
         logger.debug("Read inputs: %s", inputs)
 
         n_outputs = self._arcom.read_uint8()  # type: int
         logger.debug("Read number of outputs: %s", n_outputs)
 
-        outputs = self._arcom.read_char_array(
-            array_len=n_outputs
-        )  # type: list(str)
+        outputs = self._arcom.read_char_array(array_len=n_outputs)
         logger.debug("Read outputs: %s", outputs)
 
         hardware.max_states = max_states
@@ -295,11 +281,12 @@ class BpodCOMProtocol(BpodBase):
         """
         Enable input ports on Bpod device
 
-        :param list[int] inputs_enabled: list of inputs to be enabled (0 = disabled, 1 = enabled)
+        :param list[int] inputs_enabled: list of inputs to be enabled
+        (0 = disabled, 1 = enabled)
         :rtype: bool
         """
 
-        ###### set inputs enabled or disabled #######################################################
+        ###### set inputs enabled or disabled ######################
         hardware.inputs_enabled = [0] * len(hardware.inputs)
 
         print("len ", len(hardware.inputs))
@@ -320,12 +307,9 @@ class BpodCOMProtocol(BpodBase):
             hardware.inputs_enabled[i] = (
                 settings.get("BPOD_BEHAVIOR_PORTS_ENABLED")[j] == "Yes"
             )
-        #############################################################################################
 
         print("inputs enabled: ", hardware.inputs_enabled)
-        logger.debug(
-            "Requesting ports enabling (%s)", SendMessageHeader.ENABLE_PORTS
-        )
+        logger.debug("Requesting ports enabling (%s)", SendMessageHeader.ENABLE_PORTS)
         logger.debug(
             "Inputs enabled (%s): %s",
             len(hardware.inputs_enabled),
@@ -342,15 +326,14 @@ class BpodCOMProtocol(BpodBase):
 
         logger.debug("Response: %s", response)
 
-        return (
-            True if response == ReceiveMessageHeader.ENABLE_PORTS_OK else False
-        )
+        return True if response == ReceiveMessageHeader.ENABLE_PORTS_OK else False
 
     def _bpodcom_set_sync_channel_and_mode(self, sync_channel, sync_mode):
         """
         Request sync channel and sync mode configuration
 
-        :param int sync_channel: 255 = no sync, otherwise set to a hardware channel number
+        :param int sync_channel: 255 = no sync,
+        otherwise set to a hardware channel number
         :param int sync_mode: 0 = flip logic every trial, 1 = every state
         :rtype: bool
         """
@@ -370,11 +353,7 @@ class BpodCOMProtocol(BpodBase):
 
         logger.debug("Response: %s", response)
 
-        return (
-            True
-            if response == ReceiveMessageHeader.SYNC_CHANNEL_MODE_OK
-            else False
-        )
+        return True if response == ReceiveMessageHeader.SYNC_CHANNEL_MODE_OK else False
 
     def _bpodcom_echo_softcode(self, softcode):
         """
@@ -458,13 +437,12 @@ class BpodCOMProtocol(BpodBase):
     def _bpodcom_get_trial_timestamp_start(self):
         data = self._arcom.read_bytes_array(8)
         self.trial_start_micros = ArduinoTypes.cvt_uint64(b"".join(data))
-        return self.trial_start_micros / float(
-            self.hardware.DEFAULT_FREQUENCY_DIVIDER
-        )
+        return self.trial_start_micros / float(self.hardware.DEFAULT_FREQUENCY_DIVIDER)
 
     def _bpodcom_read_trial_start_timestamp_seconds(self):
         """
-        A new incoming timestamp message is available. Read trial start timestamp in millseconds and convert to seconds.
+        A new incoming timestamp message is available.
+        Read trial start timestamp in milliseconds and convert to seconds.
 
         :return: trial start timestamp in milliseconds
         :rtype: float
@@ -489,15 +467,9 @@ class BpodCOMProtocol(BpodBase):
         trial_end_timestamp = trial_end_micros / float(
             self.hardware.DEFAULT_FREQUENCY_DIVIDER
         )
-        trial_time_from_micros = (
-            trial_end_timestamp - self.trial_start_timestamp
-        )
-        trial_time_from_cycles = (
-            n_hw_timer_cyles / self.hardware.cycle_frequency
-        )
-        discrepancy = (
-            abs(trial_time_from_micros - trial_time_from_cycles) * 1000
-        )
+        trial_time_from_micros = trial_end_timestamp - self.trial_start_timestamp
+        trial_time_from_cycles = n_hw_timer_cyles / self.hardware.cycle_frequency
+        discrepancy = abs(trial_time_from_micros - trial_time_from_cycles) * 1000
 
         return trial_end_timestamp, discrepancy
 
@@ -515,8 +487,7 @@ class BpodCOMProtocol(BpodBase):
 
         return (
             True
-            if response
-            == ReceiveMessageHeader.STATE_MACHINE_INSTALLATION_STATUS
+            if response == ReceiveMessageHeader.STATE_MACHINE_INSTALLATION_STATUS
             else False
         )
 
@@ -539,9 +510,7 @@ class BpodCOMProtocol(BpodBase):
         opcode = response[0]
         data = response[1]
 
-        logger.debug(
-            "Received opcode message: opcode=%s, data=%s", opcode, data
-        )
+        logger.debug("Received opcode message: opcode=%s, data=%s", opcode, data)
 
         return opcode, data
 
@@ -603,7 +572,7 @@ class BpodCOMProtocol(BpodBase):
 
         if not (1 <= message_id <= 255):
             raise BpodErrorException(
-                "Error: Bpod can only store 255 serial messages (indexed 1-255). You used the message_id {0}".format(
+                "Error: Bpod can store 255 serial msgs. You used message_id {0}".format(
                     message_id
                 )
             )
@@ -632,9 +601,7 @@ class BpodCOMProtocol(BpodBase):
         logger.debug("Confirmation: %s", response)
 
         return (
-            True
-            if response == ReceiveMessageHeader.LOAD_SERIAL_MESSAGE_OK
-            else False
+            True if response == ReceiveMessageHeader.LOAD_SERIAL_MESSAGE_OK else False
         )
 
     def _bpodcom_reset_serial_messages(self):
@@ -654,11 +621,7 @@ class BpodCOMProtocol(BpodBase):
 
         logger.debug("Confirmation: %s", response)
 
-        return (
-            True
-            if response == ReceiveMessageHeader.RESET_SERIAL_MESSAGES
-            else False
-        )
+        return True if response == ReceiveMessageHeader.RESET_SERIAL_MESSAGES else False
 
     def _bpodcom_override_digital_hardware_state(self, channel_number, value):
         """
