@@ -660,6 +660,7 @@ class BpodBase(object):
     # PROPERTIES
     @property
     def session(self):
+        print("ses")
         return self._session  # type: Session
 
     @session.setter
