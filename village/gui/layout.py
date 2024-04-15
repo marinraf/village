@@ -35,9 +35,7 @@ class Layout(QGridLayout):
 
     def create_common_elements(self):
         self.exit_button = QPushButton("Exit")
-        self.exit_button.setStyleSheet(
-            "QPushButton {background-color: lightcoral}"
-        )
+        self.exit_button.setStyleSheet("QPushButton {background-color: lightcoral}")
         self.exit_button.setFixedSize(
             self.button_width * self.column_width,
             self.widget_height * self.row_height,
